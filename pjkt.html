@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimalist Dashboard</title>
+  <style>
+    /* Base styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: var(--header-bg);
+      color: var(--header-color);
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: var(--btn-bg);
+      color: var(--btn-color);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--btn-hover-bg);
+    }
+
+    .task-input {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .task-input input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid var(--input-border);
+      border-radius: 5px;
+    }
+
+    .tasks {
+      list-style: none;
+      padding: 0;
+    }
+
+    .task {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--task-bg);
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .task span {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .task button {
+      margin-left: 5px;
+    }
+
+    .dark-mode {
+      --header-bg: #333;
+      --header-color: #fff;
+      --btn-bg: #444;
+      --btn-color: #fff;
+      --btn-hover-bg: #555;
+      --input-border: #555;
+      --task-bg: #444;
+      background-color: #222;
+      color: #fff;
+    }
+
+    .light-mode {
+      --header-bg: #f4f4f4;
+      --header-color: #000;
+      --btn-bg: #007bff;
+      --btn-color: #fff;
+      --btn-hover-bg: #0056b3;
+      --input-border: #ccc;
+      --task-bg: #fff;
+      background-color: #fff;
+      color: #000;
+    }
+  </style>
+</head>
+<body class="light-mode">
+  <header>
+    <h1>Dashboard</h1>
+    <button id="themeToggle">Toggle Dark Mode</button>
+  </header>
+  <div class="container">
+    <div class="task-input">
+      <input type="text" id="taskInput" placeholder="Enter a task">
+      <button class="btn-primary" id="addTask">Add Task</button>
+    </div>
+    <ul class="tasks" id="taskList"></ul>
+  </div>
+
+  <script>
+    // Select elements
+    const taskInput = document.getElementById('taskInput');
+    const addTaskButton = document.getElementById('addTask');
+    const taskList = document.getElementById('taskList');
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+    // Toggle theme
+    themeToggle.addEventListener('click', () => {
+      if (body.classList.contains('light-mode')) {
+        body.classList.remove('light-mode');
+        body.classList.add('dark-mode');
+      } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+      }
+    });
+
+    // Add task
+    addTaskButton.addEventListener('click', () => {
+      const taskText = taskInput.value.trim();
+      if (taskText) {
+        addTask(taskText);
+        taskInput.value = '';
+      }
+    });
+
+    // Add task to list
+    function addTask(text) {
+      const li = document.createElement('li');
+      li.className = 'task';
+
+      const span = document.createElement('span');
+      span.textContent = text;
+
+      const editButton = document.createElement('button');
+      editButton.textContent = 'Edit';
+      editButton.addEventListener('click', () => editTask(li, span));
+
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.addEventListener('click', () => li.remove());
+
+      li.appendChild(span);
+      li.appendChild(editButton);
+      li.appendChild(deleteButton);
+
+      taskList.appendChild(li);
+    }
+
+    // Edit task
+    function editTask(li, span) {
+      const newText = prompt('Edit your task:', span.textContent);
+      if (newText !== null) {
+        span.textContent = newText.trim() || span.textContent;
+      }
+    }
+  </script>
+</body>
+</html>
